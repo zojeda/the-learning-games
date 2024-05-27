@@ -4,6 +4,7 @@
     "main": "lib/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "start:dev": "genkit start",
         "start": "node lib/index.js",
         "build": "tsc",
         "build:watch": "tsc --watch"
@@ -23,7 +24,8 @@
         "zod": "^3.23.8"
     },
     "devDependencies": {
-        "typescript": "^5.4.5"
+        "typescript": "^5.4.5",
+        "genkit": "^0.5.1"
         
     }
 }

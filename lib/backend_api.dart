@@ -5,7 +5,7 @@ import 'package:myapp/story_book.dart';
 import 'package:http/http.dart' as http;
 
 class BackendApi {
-  static const backendBaseUrl = 'https://localhost:3400';
+  static const backendBaseUrl = 'http://localhost:3400';
   static const storyBookFlowUrl = "${BackendApi.backendBaseUrl}/storyBookFlow";
   static const generateChapterBookFlowUrl = "${BackendApi.backendBaseUrl}/generateChapterBookFlow";
 
