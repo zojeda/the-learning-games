@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "354109293556",
+    "project_id": "the-learning-games-8a10e",
+    "storage_bucket": "the-learning-games-8a10e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354109293556:android:51391a60322c88157cefa1",
+        "android_client_info": {
+          "package_name": "ia.altb.the_learning_games"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_PThi8nLYosZyupVTlKkd79gSrnUpNKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
