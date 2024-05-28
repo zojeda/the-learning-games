@@ -4,13 +4,17 @@ class StoryBook {
   final String audience;
   final String language;
   final int numChapters;
+  final String coverContent;
+  final String coverContentType;
 
   const StoryBook(
       {required this.topic,
       required this.indexContent,
       required this.audience,
       required this.language,
-      required this.numChapters});
+      required this.numChapters,
+      required this.coverContent,
+      required this.coverContentType});
 
   factory StoryBook.fromJson(Map<String, dynamic> json) {
     return switch (json['result']) {
@@ -18,15 +22,19 @@ class StoryBook {
        'indexContent': String indexContent,
        'audience': String audience,
        'language': String language,
-       'numChapters': int numChapters
+       'numChapters': int numChapters,
+       'coverContent': String coverContent,
+       'coverContentType': String coverContentType,
        } => StoryBook(
           topic: topic,
           indexContent: indexContent,
           audience: audience,
           language: language,
-          numChapters: numChapters
+          numChapters: numChapters,
+          coverContent: coverContent,
+          coverContentType: coverContentType
         ),
-      _ => throw const FormatException('Failed to load album.'),
+      _ => throw const FormatException('Failed to load story book.'),
     };
   }
 }

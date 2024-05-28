@@ -45,12 +45,17 @@ const firebase_1 = require("@genkit-ai/firebase");
 const googleai_2 = require("@genkit-ai/googleai");
 const flow_1 = require("@genkit-ai/flow");
 const dotprompt_1 = require("@genkit-ai/dotprompt");
+const vertexai_1 = require("@genkit-ai/vertexai");
 (0, core_1.configureGenkit)({
     plugins: [
         (0, dotprompt_1.dotprompt)(),
         (0, firebase_1.firebase)(),
         (0, googleai_2.googleAI)({
             apiVersion: "v1beta"
+        }),
+        (0, vertexai_1.vertexAI)({
+            projectId: 'the-learning-games-8a10e',
+            location: 'us-central1'
         }),
     ],
     logLevel: "debug",
@@ -128,6 +133,8 @@ exports.storyBookFlow = (0, flow_1.defineFlow)({
         numChapters: z.number(),
         audience: supportedAudiences,
         language: supportedLanguages,
+        coverContent: z.string().optional(),
+        coverContentType: z.string().optional(),
     })
 }, async ({ numChapters, audience, topic, language }) => {
     const startingPrompt = await (0, ai_1.renderPrompt)({
@@ -136,12 +143,23 @@ exports.storyBookFlow = (0, flow_1.defineFlow)({
         model: googleai_1.gemini15Flash
     });
     let result = await (0, ai_1.generate)(startingPrompt);
+    const imageResult = await (0, ai_1.generate)({
+        model: vertexai_1.imagen2,
+        prompt: `Generate a cover image for a storybook about : '${topic}'`,
+        output: {
+            format: "media"
+        }
+    });
+    const generatedImage = imageResult.media();
+    console.log("image contentType: ", generatedImage === null || generatedImage === void 0 ? void 0 : generatedImage.contentType);
     let response = {
         topic: topic,
         indexContent: result.text(),
         audience,
         language,
-        numChapters
+        numChapters,
+        coverContent: generatedImage === null || generatedImage === void 0 ? void 0 : generatedImage.url,
+        coverContentType: generatedImage === null || generatedImage === void 0 ? void 0 : generatedImage.contentType
     };
     return response;
 });
@@ -168,7 +186,7 @@ exports.generateChapterBookFlow = (0, flow_1.defineFlow)({
     let response = {
         chapter,
         text: result.text(),
-        title: 'title'
+        title: 'title',
     };
     return response;
 });
@@ -181,6 +199,7 @@ function chapterNumbersGenerator(limit) {
     });
 }
 (0, flow_1.startFlowsServer)({
+    port: 3401,
     cors: {
         origin: '*',
     }

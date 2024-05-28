@@ -1,4 +1,4 @@
-import 'package:myapp/page_content.dart';
+import 'package:myapp/index_page.dart';
 import 'package:myapp/story_book.dart';
 
 import 'page.dart';
@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           for (var i = 0; i < widget.storyBook.numChapters+1; i++)
             i == 0 
-              ? PageContent(data: widget.storyBook.indexContent)
+              ? IndexPage(storyBook: widget.storyBook)
               : DemoPage(storyBook: widget.storyBook, page: i),
         ],
       )),

@@ -6,6 +6,7 @@ import { firebase } from "@genkit-ai/firebase";
 import { googleAI } from "@genkit-ai/googleai";
 import { defineFlow, startFlowsServer } from "@genkit-ai/flow";
 import { dotprompt } from '@genkit-ai/dotprompt';
+import { imagen2, vertexAI } from '@genkit-ai/vertexai';
 
 configureGenkit({
     plugins: [
@@ -13,6 +14,10 @@ configureGenkit({
         firebase(),
         googleAI({
             apiVersion: "v1beta"
+        }),
+        vertexAI({
+            projectId: 'the-learning-games-8a10e',
+            location: 'us-central1'
         }
 
         ),
@@ -97,6 +102,8 @@ export const storyBookFlow = defineFlow(
             numChapters: z.number(),
             audience: supportedAudiences,
             language: supportedLanguages,
+            coverContent: z.string().optional(),
+            coverContentType: z.string().optional(),
         })
     },
     async ({ numChapters, audience, topic, language }) => {
@@ -108,14 +115,26 @@ export const storyBookFlow = defineFlow(
 
         let result = await generate(startingPrompt);
 
+        const imageResult = await generate({
+            model: imagen2,
+            prompt: `Generate a cover image for a storybook about : '${topic}'`,
+            output: {
+                format: "media"
+            }
+          });
+
+        const generatedImage = imageResult.media();
+        console.log("image contentType: ", generatedImage?.contentType);
         let response = {
             topic: topic,
             indexContent: result.text(),
             audience,
             language,
-            numChapters
+            numChapters,
+            coverContent: generatedImage?.url,
+            coverContentType: generatedImage?.contentType
+        };
 
-        }
         return response;
     }
 );
@@ -133,6 +152,7 @@ export const generateChapterBookFlow = defineFlow(
             chapter: z.number(),
             title: z.string(),
             text: z.string(),
+
         })
     },
     async ({ chapter, indexContent, audience, language }) => {
@@ -142,11 +162,16 @@ export const generateChapterBookFlow = defineFlow(
             model: gemini15Flash
         });
 
+          
         let result = await generate(chapterPrompt);
+
+
+
         let response = {
             chapter,
             text: result.text(),
-            title: 'title'
+            title: 'title',
+
         }
 
 
@@ -165,6 +190,7 @@ async function* chapterNumbersGenerator(limit: number) {
 
 
 startFlowsServer({
+    port: 3401,
     cors: {
         origin: '*',
     }

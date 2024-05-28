@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:myapp/backend_api.dart';
 import 'package:myapp/chapter.dart';
-import 'package:myapp/page_content.dart';
+import 'package:myapp/chapter_page.dart';
 import 'package:myapp/story_book.dart';
 
 class DemoPage extends StatefulWidget {
@@ -33,7 +32,7 @@ class _DemoPageState extends State<DemoPage> {
       future: futureChapter,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return PageContent(data: snapshot.data!.text);
+          return ChapterPage(storyBook: widget.storyBook, chapter: snapshot.data!);
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
