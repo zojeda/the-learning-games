@@ -22,3 +22,25 @@ $ npm run start:dev
 
 ```
 
+```mermaid
+sequenceDiagram
+    User->>+FrontEnd: Generate StoryBook
+    FrontEnd ->>+ BackEnd: Generate Index
+    BackEnd ->>+ KnowledgeSource: Get Full Raw Content
+    KnowledgeSource -->>- BackEnd: Raw Content
+    BackEnd ->>+ LLM: Process Educ Content
+    LLM -->>- BackEnd: Structured Content Json
+    BackEnd ->>+ LLM: Generate Index
+    LLM -->>- BackEnd: Index
+    BackEnd -->>- FrontEnd: StoryBook cover
+    FrontEnd -->>- User: Visual Book
+
+    User ->>+ FrontEnd: Navigate Book chapters
+    FrontEnd ->>+ BackEnd: Generate Chapter
+    BackEnd ->>+ LLM: Generate Chapter Content
+    LLM -->>- BackEnd: Chapter Content
+    BackEnd ->>+ LLM: Generate Interaction Hooks
+    LLM -->>- BackEnd: Interaction Hooks
+    BackEnd -->>- FrontEnd: Chapter
+    FrontEnd -->>- User: Visual Chapter 
+```
